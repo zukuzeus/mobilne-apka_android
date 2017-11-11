@@ -1,13 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.widget.LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="horizontal"
     tools:context="com.example.danie.mobilne.ShopListActivity">
+
 
     <ListView
         android:id="@+id/product_list"
+        android:layout_width="wrap_content"
+        android:layout_height="307dp"
+        android:layout_above="@+id/linearLayout"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+
+    </ListView>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"></ListView>
-</android.widget.LinearLayout>
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/linearLayout">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/newProductName"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".33"
+                android:ems="10"
+                android:hint="Product"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/newProductShop"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".33"
+                android:ems="10"
+                android:hint="Shop"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/newProductPrice"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".33"
+                android:ems="10"
+                android:hint="Price"
+                android:inputType="numberDecimal" />
+        </TableRow>
+
+        <Button
+            android:id="@+id/productAdd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:text="Add New Product" />
+    </LinearLayout>
+
+</android.widget.RelativeLayout>

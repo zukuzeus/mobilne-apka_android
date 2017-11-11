@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,10 +21,12 @@ public class ProductAdapter extends BaseAdapter {
 
 
     public ProductAdapter(Context context, List<Product> productList) {
+        super();
         this.mContext = context;
         this.products = productList;
 
     }
+
 
     @Override
     public int getCount() {
@@ -43,21 +44,21 @@ public class ProductAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View view, ViewGroup parent) {
 
-        Product student = products.get(position);
-        convertView = LayoutInflater.from(mContext).inflate(R.layout.single_product, null);
+        Product product = products.get(position);
+        view = LayoutInflater.from(mContext).inflate(R.layout.single_product, null);
 
-        TextView productname = (TextView) convertView.findViewById(R.id.productname);
-        TextView productshop = (TextView) convertView.findViewById(R.id.productshop);
-        TextView productprice = (TextView) convertView.findViewById(R.id.productprice);
-        TextView productquantity = (TextView) convertView.findViewById(R.id.product_quantity);
+        TextView productname = (TextView) view.findViewById(R.id.productname);
+        TextView productshop = (TextView) view.findViewById(R.id.productshop);
+        TextView productprice = (TextView) view.findViewById(R.id.productprice);
+        TextView productquantity = (TextView) view.findViewById(R.id.product_quantity);
 
-        productname.setText(student.getProduct());
-        productshop.setText(student.getStore());
-        productprice.setText(Double.toString(student.getPrice()));
-        productquantity.setText(Integer.toString(student.getQuantity()));
+        productname.setText(product.getProductName());
+        productshop.setText(product.getStore());
+        productprice.setText(Double.toString(product.getPrice()));
+        productquantity.setText(Integer.toString(product.getQuantity()));
 
-        return convertView;
+        return view;
     }
 }

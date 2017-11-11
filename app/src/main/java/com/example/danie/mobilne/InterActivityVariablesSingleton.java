@@ -11,7 +11,11 @@ public class InterActivityVariablesSingleton {
     private final String LOGIN = "/login";
     private final String REGISTER = "/register";
     private final String PRODUCTS = "/results";
+    private final String DELETE_PRODUCT = "/delete";
+    private final String UPDATE_PRODUCT = "/update";
+    private final String ADD_PRODUCT = "/add";
     private String USER;
+
 
     private InterActivityVariablesSingleton() {
 
@@ -36,12 +40,23 @@ public class InterActivityVariablesSingleton {
         return INSTANCE.SERVERADRESS + INSTANCE.PRODUCTS;
     }
 
-    public String getUSER() {
+    public synchronized String getUSER() {
         return USER;
     }
 
-    public void setUSER(String user) {
+    public synchronized void setUSER(String user) {
         this.USER = user;
     }
 
+    public synchronized String getDeleteURL() {
+        return INSTANCE.SERVERADRESS + DELETE_PRODUCT;
+    }
+
+    public synchronized String getUpdateURL() {
+        return INSTANCE.SERVERADRESS + UPDATE_PRODUCT;
+    }
+
+    public synchronized String getAddURL() {
+        return INSTANCE.SERVERADRESS + ADD_PRODUCT;
+    }
 }

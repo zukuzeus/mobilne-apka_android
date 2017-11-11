@@ -1,7 +1,5 @@
 package com.example.danie.mobilne;
 
-import org.json.JSONObject;
-
 import java.io.Serializable;
 
 /**
@@ -9,7 +7,8 @@ import java.io.Serializable;
  */
 
 public class Product implements Serializable {
-    private String product;
+    private static final long serialVersionUID = 1L;
+    private String productName;
     private String store;
     private double price;
     private int quantity;
@@ -17,19 +16,19 @@ public class Product implements Serializable {
     public Product() {
     }
 
-    public Product(String product, String store, double price, int quantity) {
-        this.product = product;
+    public Product(String productName, String store, double price, int quantity) {
+        this.productName = productName;
         this.store = store;
         this.price = price;
         this.quantity = quantity;
     }
 
-    public String getProduct() {
-        return product;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setProduct(String product) {
-        this.product = product;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public String getStore() {
