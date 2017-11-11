@@ -1,77 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/productname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:text="TextView"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/productshop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/productname"
+        android:text="TextView"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/productprice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView12"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/productshop"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/product_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/productprice"
+        android:layout_below="@+id/productprice"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="Product:"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView9"
+        android:layout_below="@+id/textView9"
+        android:text="Shop: "
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView10"
+        android:layout_below="@+id/textView10"
+        android:text="Price: " />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView11"
+        android:layout_below="@+id/textView11"
+        android:text="Quantity:" />
 
 
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-
-        <TextView
-            android:id="@+id/productname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-
-            android:layout_marginLeft="16dp"
-            android:text="masloo"
-            android:textSize="24sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            tools:layout_editor_absoluteY="0dp" />
-
-        <TextView
-            android:id="@+id/productshop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="134dp"
-            android:layout_toEndOf="@+id/productname"
-            android:text="biedronka"
-            android:textSize="24sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            tools:layout_editor_absoluteY="0dp" />
-
-
-        <TextView
-            android:id="@+id/productprice"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_column="3"
-
-            android:layout_marginLeft="259dp"
-            android:text="5.99"
-            android:textAlignment="textStart"
-            android:textSize="24sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            tools:layout_editor_absoluteY="0dp" />
-
-        <TextView
-            android:id="@+id/product_quantity"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-
-            android:layout_marginLeft="338dp"
-            android:gravity="right"
-            android:text="123"
-            android:textAlignment="center"
-            android:textSize="24sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            tools:layout_editor_absoluteY="0dp" />
-
-
-
-    </android.support.constraint.ConstraintLayout>
-</LinearLayout>
+</RelativeLayout>
