@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -52,7 +51,6 @@ public class ShopListActivity extends Activity {
 
     private void setupOnCreate() {
         listView = (ListView) findViewById(R.id.product_list);
-        //listView.setAdapter(new ProductAdapter(this,productList));
         newProduct = (Button) findViewById(R.id.productAdd);
         product = (EditText) findViewById(R.id.newProductName);
         shop = (EditText) findViewById(R.id.newProductShop);
@@ -72,11 +70,12 @@ public class ShopListActivity extends Activity {
         newProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addUserToDatabase();
+                addProductToDatabase();
                 recreate();
+
             }
         });
-        final TextWatcher buttonEnabled = new TextWatcher() {
+        final TextWatcher buttonEnabledWatcher = new TextWatcher() {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -98,9 +97,9 @@ public class ShopListActivity extends Activity {
 
             }
         };
-        product.addTextChangedListener(buttonEnabled);
-        shop.addTextChangedListener(buttonEnabled);
-        price.addTextChangedListener(buttonEnabled);
+        product.addTextChangedListener(buttonEnabledWatcher);
+        shop.addTextChangedListener(buttonEnabledWatcher);
+        price.addTextChangedListener(buttonEnabledWatcher);
     }
 
     private void askDatabaseForProducts() {
@@ -115,6 +114,7 @@ public class ShopListActivity extends Activity {
                 } catch (Exception e) {
                     Log.d("Some tag", Log.getStackTraceString(e.getCause().getCause()));
                 }
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -133,16 +133,17 @@ public class ShopListActivity extends Activity {
         rQueuee.add(request);
     }
 
-    private void addUserToDatabase() {
+    private void addProductToDatabase() {
         //TODO zrobić porzadek z tym czyms
         StringRequest request = new StringRequest(Request.Method.POST, InterActivityVariablesSingleton.getInstance().getAddURL(), new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 if (s.equals("")) {
                     Toast.makeText(ShopListActivity.this, "no responce", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(ShopListActivity.this, "new user success", Toast.LENGTH_SHORT).show();
+                } else if (s.equals("true")) {
+                    Toast.makeText(ShopListActivity.this, "new product added", Toast.LENGTH_SHORT).show();
                 }
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -157,28 +158,15 @@ public class ShopListActivity extends Activity {
                 parameters.put("product", product.getText().toString());
                 parameters.put("shop", shop.getText().toString());
                 parameters.put("price", price.getText().toString());
-
                 return parameters;
             }
         };
         RequestQueue rQueuee = Volley.newRequestQueue(ShopListActivity.this);
         rQueuee.add(request);
+
+
     }
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        //TODO czy to wgle będzie potrzebne sie zastanowić
-//        if (requestCode == 1) {
-//
-//            if (resultCode == RESULT_OK) {
-//                //Update List
-//                super.onRestart();
-//                Toast.makeText(ShopListActivity.this, "wrociłes z poprzedniej aktywności, zrestartowałes widok", Toast.LENGTH_LONG).show();
-//            }
-//            if (resultCode == RESULT_CANCELED) {
-//                //Do nothing?
-//            }
-//        }
-//    }
+
 
     @Override
     public void onRestart() {

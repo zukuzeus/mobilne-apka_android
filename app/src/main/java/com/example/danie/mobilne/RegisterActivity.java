@@ -1,8 +1,8 @@
 package com.example.danie.mobilne;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,8 +31,7 @@ public class RegisterActivity extends AppCompatActivity {
         final Button bRegister = (Button) findViewById(R.id.bRegister);
 
 
-        String IP = "192.168.1.104:8080";
-        final String URL = "http:/" + IP + "/register";
+
         bRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,14 +42,14 @@ public class RegisterActivity extends AppCompatActivity {
                         if (s.equals("true")) {
                             Toast.makeText(RegisterActivity.this, "registration Successful", Toast.LENGTH_LONG).show();
                             startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                        } else {
+                        } else if (s.equals("false")) {
                             Toast.makeText(RegisterActivity.this, "user already exist, Can't register", Toast.LENGTH_LONG).show();
                         }
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(RegisterActivity.this, "Some error occurred -> " + error, Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegisterActivity.this, "Some error occurred ->" + error, Toast.LENGTH_LONG).show();
                     }
                 }) {
                     @Override
