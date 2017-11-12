@@ -1,8 +1,8 @@
 package com.example.danie.mobilne;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,11 +30,14 @@ public class LoginActivity extends AppCompatActivity {
         final EditText etPassword = (EditText) findViewById(R.id.etPassword);
         final Button bLogin = (Button) findViewById(R.id.bLogin);
         final TextView registerLink = (TextView) findViewById(R.id.tvRegisterHere);
+        final TextView ipButton = (TextView) findViewById(R.id.ipButton);
+        final EditText ip = (EditText) findViewById(R.id.ipInput);
 
 
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InterActivityVariablesSingleton.getInstance().setServerIp(ip.getText().toString());
                 StringRequest request = new StringRequest(Request.Method.POST, InterActivityVariablesSingleton.getInstance().getLoginURL(), new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
@@ -73,6 +76,12 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(registerIntent);
+            }
+        });
+        ipButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ip.setVisibility(View.VISIBLE);
             }
         });
 
