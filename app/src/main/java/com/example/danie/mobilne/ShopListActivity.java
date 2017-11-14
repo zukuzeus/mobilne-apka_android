@@ -126,6 +126,7 @@ public class ShopListActivity extends Activity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameters = new HashMap<String, String>();
                 parameters.put("username", InterActivityVariablesSingleton.getInstance().getUSER());
+                parameters.put("password", InterActivityVariablesSingleton.getInstance().getPASSWORD());
                 return parameters;
             }
         };
@@ -155,6 +156,7 @@ public class ShopListActivity extends Activity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameters = new HashMap<String, String>();
                 parameters.put("username", InterActivityVariablesSingleton.getInstance().getUSER());
+                parameters.put("password", InterActivityVariablesSingleton.getInstance().getPASSWORD());
                 parameters.put("product", product.getText().toString());
                 parameters.put("shop", shop.getText().toString());
                 parameters.put("price", price.getText().toString());

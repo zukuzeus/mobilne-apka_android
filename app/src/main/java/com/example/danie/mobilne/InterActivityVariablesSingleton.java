@@ -16,6 +16,7 @@ public class InterActivityVariablesSingleton {
     private String Ip;
     private String SERVER_ADRESS;
     private String USER;
+    private String PASSWORD;
 
 
     private InterActivityVariablesSingleton() {
@@ -64,5 +65,13 @@ public class InterActivityVariablesSingleton {
     public synchronized void setServerIp(String ip) {
         this.INSTANCE.Ip = ip;
         this.INSTANCE.SERVER_ADRESS = INSTANCE.http + INSTANCE.Ip;
+    }
+
+    public String getPASSWORD() {
+        return PASSWORD;
+    }
+
+    public void setPASSWORD(String PASSWORD) {
+        this.PASSWORD = PASSWORD;
     }
 }

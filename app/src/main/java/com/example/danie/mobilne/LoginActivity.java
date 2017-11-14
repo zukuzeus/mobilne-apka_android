@@ -44,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (s.equals("true")) {
                             Toast.makeText(LoginActivity.this, "Login succesful", Toast.LENGTH_LONG).show();
                             InterActivityVariablesSingleton.getInstance().setUSER(etUsername.getText().toString());
+                            InterActivityVariablesSingleton.getInstance().setPASSWORD(etPassword.getText().toString());
                             Intent productScreen = new Intent(LoginActivity.this, ShopListActivity.class);
                             productScreen.putExtra("username",etUsername.getText().toString());
                             startActivity(productScreen);

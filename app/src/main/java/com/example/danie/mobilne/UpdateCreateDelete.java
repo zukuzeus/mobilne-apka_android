@@ -1,13 +1,10 @@
 package com.example.danie.mobilne;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,8 +15,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -126,6 +121,7 @@ public class UpdateCreateDelete extends AppCompatActivity {
                 Map<String, String> parameters = new HashMap<String, String>();
 
                 parameters.put("username", InterActivityVariablesSingleton.getInstance().getUSER());
+                parameters.put("password", InterActivityVariablesSingleton.getInstance().getPASSWORD());
                 parameters.put("product", prod.getProductName());
                 return parameters;
             }
@@ -159,6 +155,7 @@ public class UpdateCreateDelete extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameters = new HashMap<String, String>();
                 parameters.put("username", InterActivityVariablesSingleton.getInstance().getUSER());
+                parameters.put("password", InterActivityVariablesSingleton.getInstance().getPASSWORD());
                 parameters.put("product", prod.getProductName());
                 parameters.put("quantity", Integer.toString(newQ));
                 return parameters;
