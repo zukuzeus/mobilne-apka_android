@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context="com.example.danie.mobilne.ShopListActivity">
+    tools:context="com.example.danie.mobilne.ShopList.ShopListActivity">
 
 
     <ListView
@@ -20,13 +19,13 @@
     </ListView>
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="visible"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/linearLayout">
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <TableRow
             android:layout_width="match_parent"
@@ -69,6 +68,12 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentStart="true"
             android:text="Add New Product" />
+
+        <Button
+            android:id="@+id/synchronise_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Synchronize" />
     </LinearLayout>
 
 </android.widget.RelativeLayout>

@@ -19,8 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".ShopListActivity" />
-        <activity android:name=".UpdateCreateDelete"></activity>
+        <activity android:name=".ShopList.ShopListActivity" />
+        <activity android:name=".UpdateCreateDeleteProductActivity"></activity>
     </application>
 
 </manifest>
