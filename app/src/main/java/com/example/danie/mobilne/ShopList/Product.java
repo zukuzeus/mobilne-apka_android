@@ -1,4 +1,4 @@
-package com.example.danie.mobilne;
+package com.example.danie.mobilne.ShopList;
 
 import java.io.Serializable;
 

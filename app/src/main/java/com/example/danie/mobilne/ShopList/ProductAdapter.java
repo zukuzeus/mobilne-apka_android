@@ -1,4 +1,4 @@
-package com.example.danie.mobilne;
+package com.example.danie.mobilne.ShopList;
 
 /**
  * Created by danie on 09.11.2017.
@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.example.danie.mobilne.R;
 
 import java.util.List;
 

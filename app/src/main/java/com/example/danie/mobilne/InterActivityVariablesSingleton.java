@@ -1,5 +1,7 @@
 package com.example.danie.mobilne;
 
+import com.example.danie.mobilne.database.DatabaseHelper;
+
 /**
  * Created by danie on 07.11.2017.
  */
@@ -17,6 +19,7 @@ public class InterActivityVariablesSingleton {
     private String SERVER_ADRESS;
     private String USER;
     private String PASSWORD;
+    private DatabaseHelper User_db;
 
 
     private InterActivityVariablesSingleton() {
@@ -66,6 +69,7 @@ public class InterActivityVariablesSingleton {
         this.INSTANCE.Ip = ip;
         this.INSTANCE.SERVER_ADRESS = INSTANCE.http + INSTANCE.Ip;
     }
+
 
     public String getPASSWORD() {
         return PASSWORD;

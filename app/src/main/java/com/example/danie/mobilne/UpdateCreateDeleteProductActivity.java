@@ -1,8 +1,6 @@
 package com.example.danie.mobilne;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -11,15 +9,15 @@ import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.danie.mobilne.CustomActivities.ActivityWithDatabase;
+import com.example.danie.mobilne.ShopList.Product;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class UpdateCreateDelete extends AppCompatActivity {
+public class UpdateCreateDeleteProductActivity extends ActivityWithDatabase {
     private Product prod;
     private TextView productName;
     private TextView productShop;
@@ -66,56 +64,41 @@ public class UpdateCreateDelete extends AppCompatActivity {
     }
 
     private void setButtonBehavior() {
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO request do kasowania produktów
-
-                deleteProduct();
+        deleteButton.setOnClickListener(v -> {
+            //TODO request do kasowania produktów
+            //deleteProductFromServer();
+            deleteProductFromLocalDB();
 //                Intent returnIntent = new Intent();
 //                setResult(RESULT_CANCELED, returnIntent);
-                finish();
-            }
+            finish();
         });
-        increaseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO request do update decrease
-                updateProductQuantity(-Integer.parseInt(quantityCrud.getText().toString()));
+        increaseButton.setOnClickListener(v -> {
+            //TODO request do update decrease
+            //updateProductQuantityOnServer(-Integer.parseInt(quantityCrud.getText().toString()));
+            updateProductQuantityOnLocalDB(-Integer.parseInt(quantityCrud.getText().toString()));
 //                Intent returnIntent = new Intent();
 //                setResult(RESULT_OK, returnIntent);
-                finish();
-            }
+            finish();
         });
-        decreaseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO request do update increase
-                updateProductQuantity(Integer.parseInt(quantityCrud.getText().toString()));
+        decreaseButton.setOnClickListener(v -> {
+            //TODO request do update increase
+            //updateProductQuantityOnServer(Integer.parseInt(quantityCrud.getText().toString()));
+            updateProductQuantityOnLocalDB(Integer.parseInt(quantityCrud.getText().toString()));
 //                Intent returnIntent = new Intent();
 //                setResult(RESULT_OK, returnIntent);
-                finish();
-            }
+            finish();
         });
     }
 
-    private void deleteProduct() {
+    private void deleteProductFromServer() {
 
-        StringRequest request = new StringRequest(Request.Method.POST, InterActivityVariablesSingleton.getInstance().getDeleteURL(), new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                if (s.equals("")) {
-                    Toast.makeText(UpdateCreateDelete.this, "no responce", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(UpdateCreateDelete.this, "delete success", Toast.LENGTH_SHORT).show();
-                }
+        StringRequest request = new StringRequest(Request.Method.POST, InterActivityVariablesSingleton.getInstance().getDeleteURL(), s -> {
+            if (s.equals("")) {
+                Toast.makeText(UpdateCreateDeleteProductActivity.this, "no responce", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(UpdateCreateDeleteProductActivity.this, "delete success", Toast.LENGTH_SHORT).show();
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(UpdateCreateDelete.this, "Some error occurred -> " + error, Toast.LENGTH_LONG).show();
-            }
-        }) {
+        }, error -> Toast.makeText(UpdateCreateDeleteProductActivity.this, "Some error occurred -> " + error, Toast.LENGTH_LONG).show()) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameters = new HashMap<String, String>();
@@ -125,32 +108,27 @@ public class UpdateCreateDelete extends AppCompatActivity {
                 parameters.put("product", prod.getProductName());
                 return parameters;
             }
-
-
         };
-        RequestQueue rQueue = Volley.newRequestQueue(UpdateCreateDelete.this);
+        RequestQueue rQueue = Volley.newRequestQueue(UpdateCreateDeleteProductActivity.this);
         rQueue.add(request);
     }
 
-    private void updateProductQuantity(final int delta) {
+    private void deleteProductFromLocalDB() {
+        this.DATABASE.deleteData(prod);
+
+    }
+
+    private void updateProductQuantityOnServer(final int delta) {
         final int quantity = prod.getQuantity();
         final int newQ = evaluateQuantity(quantity, delta);
 
-        StringRequest request = new StringRequest(Request.Method.POST, InterActivityVariablesSingleton.getInstance().getUpdateURL(), new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                if (s.equals("")) {
-                    Toast.makeText(UpdateCreateDelete.this, "no responce", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(UpdateCreateDelete.this, "update success", Toast.LENGTH_SHORT).show();
-                }
+        StringRequest request = new StringRequest(Request.Method.POST, InterActivityVariablesSingleton.getInstance().getUpdateURL(), s -> {
+            if (s.equals("")) {
+                Toast.makeText(UpdateCreateDeleteProductActivity.this, "no responce", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(UpdateCreateDeleteProductActivity.this, "update success", Toast.LENGTH_SHORT).show();
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(UpdateCreateDelete.this, "Some error occurred in update -> " + error, Toast.LENGTH_LONG).show();
-            }
-        }) {
+        }, error -> Toast.makeText(UpdateCreateDeleteProductActivity.this, "Some error occurred in update -> " + error, Toast.LENGTH_LONG).show()) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameters = new HashMap<String, String>();
@@ -160,11 +138,19 @@ public class UpdateCreateDelete extends AppCompatActivity {
                 parameters.put("quantity", Integer.toString(newQ));
                 return parameters;
             }
-
-
         };
-        RequestQueue rQueue = Volley.newRequestQueue(UpdateCreateDelete.this);
+        RequestQueue rQueue = Volley.newRequestQueue(UpdateCreateDeleteProductActivity.this);
         rQueue.add(request);
+    }
+
+    private void updateProductQuantityOnLocalDB(final int delta) {
+        final int quantity = prod.getQuantity();
+        final int newQ = evaluateQuantity(quantity, delta);
+        if (this.DATABASE.updateData(prod, newQ)) {
+            Toast.makeText(UpdateCreateDeleteProductActivity.this, "update locally success", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(UpdateCreateDeleteProductActivity.this, "update locally failed!!!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private int evaluateQuantity(final int quantity, final int delta) {

@@ -16,22 +16,30 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.danie.mobilne.ShopList.ShopListActivity;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
+    private EditText etUsername;
+    private EditText etPassword;
+    private Button bLogin;
+    private EditText ip;
+    private TextView registerLink;
+    private TextView ipButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        final EditText etUsername = (EditText) findViewById(R.id.etUsername);
-        final EditText etPassword = (EditText) findViewById(R.id.etPassword);
-        final Button bLogin = (Button) findViewById(R.id.bLogin);
-        final TextView registerLink = (TextView) findViewById(R.id.tvRegisterHere);
-        final TextView ipButton = (TextView) findViewById(R.id.ipButton);
-        final EditText ip = (EditText) findViewById(R.id.ipInput);
+
+        etUsername = (EditText) findViewById(R.id.etUsername);
+        etPassword = (EditText) findViewById(R.id.etPassword);
+        bLogin = (Button) findViewById(R.id.bLogin);
+        registerLink = (TextView) findViewById(R.id.tvRegisterHere);
+        ipButton = (TextView) findViewById(R.id.ipButton);
+        ip = (EditText) findViewById(R.id.ipInput);
 
 
         bLogin.setOnClickListener(new View.OnClickListener() {
@@ -46,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
                             InterActivityVariablesSingleton.getInstance().setUSER(etUsername.getText().toString());
                             InterActivityVariablesSingleton.getInstance().setPASSWORD(etPassword.getText().toString());
                             Intent productScreen = new Intent(LoginActivity.this, ShopListActivity.class);
-                            productScreen.putExtra("username",etUsername.getText().toString());
+                            productScreen.putExtra("username", etUsername.getText().toString());
                             startActivity(productScreen);
                             //finish();
                         } else {
@@ -88,5 +96,12 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        etUsername.setText("");
+        etPassword.setText("");
     }
 }
