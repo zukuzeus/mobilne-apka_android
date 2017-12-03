@@ -24,11 +24,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_2_PRODUCTS = "store";
     public static final String COL_3_PRODUCTS = "price"; // REAL
     public static final String COL_4_PRODUCTS = "quantity"; // INT
-
+    public static final String COL_5_PRODUCTS = "quantity"; // INT
 
     public static final String TASK_CREATE_PRODUCTS_TABLE_STANDALONE = "create table " + TABLE_NAME_PRODUCTS + " "
             + "(" + COL_1_PRODUCTS + " TEXT," + COL_2_PRODUCTS
-            + " TEXT," + COL_3_PRODUCTS + " REAL," + COL_4_PRODUCTS + " INT,"
+            + " TEXT," + COL_3_PRODUCTS + " REAL," + COL_4_PRODUCTS + " INT," + COL_5_PRODUCTS + " INT,"
             + " PRIMARY KEY (" + COL_1_PRODUCTS + ")"
             + ");";
     private static final String DEBUG_TAG = "SqLiteTodoManager";

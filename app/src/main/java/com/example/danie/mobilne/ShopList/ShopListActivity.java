@@ -154,6 +154,7 @@ public class ShopListActivity extends ActivityWithDatabase {
                 Map<String, String> parameters = new HashMap<String, String>();
                 parameters.put("username", InterActivityVariablesSingleton.getInstance().getUSER());
                 parameters.put("password", InterActivityVariablesSingleton.getInstance().getPASSWORD());
+//                parameters.put("id", InterActivityVariablesSingleton.getInstance().getDEVICE_ID());
                 return parameters;
             }
         };

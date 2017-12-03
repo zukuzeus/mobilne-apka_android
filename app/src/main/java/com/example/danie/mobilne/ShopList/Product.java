@@ -12,6 +12,7 @@ public class Product implements Serializable {
     private String store;
     private double price;
     private int quantity;
+    private ProductGlobalState subStatesOfProduct;
 
     public Product() {
     }
@@ -21,6 +22,18 @@ public class Product implements Serializable {
         this.store = store;
         this.price = price;
         this.quantity = quantity;
+        this.subStatesOfProduct = new ProductGlobalState(quantity, 0);
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productName='" + productName + '\'' +
+                ", store='" + store + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", subStatesOfProduct=" + subStatesOfProduct.toString() +
+                '}';
     }
 
     public String getProductName() {
@@ -52,8 +65,12 @@ public class Product implements Serializable {
     }
 
     public void setQuantity(int quantity) {
+        this.subStatesOfProduct.setQuantityLocaly(quantity);
         this.quantity = quantity;
     }
 
+    public void setQuantityRemote(int quantity) {
+        this.subStatesOfProduct.setDeviceQuantityFromRemote(quantity);
+    }
 
 }
