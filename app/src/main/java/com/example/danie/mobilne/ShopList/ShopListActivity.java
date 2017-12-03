@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ShopListActivity extends ActivityWithDatabase {
-    // final TextView text = (TextView) findViewById(R.id.textView);
 
     ListView listView;
     Button synchronise;
@@ -46,7 +45,7 @@ public class ShopListActivity extends ActivityWithDatabase {
         setContentView(R.layout.activity_shop_list);
         setupOnCreate();
         setupListeners();
-        createDatabase();
+//        createDatabase();
         //askServerDatabaseForProducts();
         askLocalDatabaseForProducts();
     }
@@ -84,10 +83,7 @@ public class ShopListActivity extends ActivityWithDatabase {
             recreate();
         });
         synchronise.setOnClickListener(v -> {
-            //askServerDatabaseForProducts();
             askServerDatabaseForProductsAndSaveItLocally();
-            recreate();
-
         });
 
         final TextWatcher buttonEnabledWatcher = new TextWatcher() {
@@ -144,7 +140,10 @@ public class ShopListActivity extends ActivityWithDatabase {
     private void askServerDatabaseForProductsAndSaveItLocally() {
         StringRequest request = new StringRequest(Request.Method.POST, InterActivityVariablesSingleton.getInstance().getProductsURL(), s -> {
             try {
-                DATABASE.insertDataFromList(createProductListFromJSONArrayAndGetIt(new JSONArray(s)));
+                List<Product> prod = createProductListFromJSONArrayAndGetIt(new JSONArray(s));
+                DATABASE.insertDataToDBFromList(prod);
+                askLocalDatabaseForProducts();
+                recreate();
             } catch (Exception e) {
                 //Log.d("Some tag", Log.getStackTraceString(e.getCause().getCause()));
                 Toast.makeText(ShopListActivity.this, "Some error occurred -> " + e, Toast.LENGTH_LONG).show();
@@ -160,7 +159,6 @@ public class ShopListActivity extends ActivityWithDatabase {
         };
         RequestQueue rQueuee = Volley.newRequestQueue(ShopListActivity.this);
         rQueuee.add(request);
-
     }
 
     private void addProductToServerDatabase() {
@@ -203,7 +201,13 @@ public class ShopListActivity extends ActivityWithDatabase {
         shop.setText("");
         price.setText("");
         newProduct.setEnabled(false);
+    }
 
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+        this.onCreate(null);
     }
 
     private boolean isText(EditText etText) {

@@ -2,7 +2,6 @@ package com.example.danie.mobilne;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,12 +15,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.danie.mobilne.CustomActivities.ActivityWithDatabase;
 import com.example.danie.mobilne.ShopList.ShopListActivity;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends ActivityWithDatabase {
     private EditText etUsername;
     private EditText etPassword;
     private Button bLogin;
@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
                             Intent productScreen = new Intent(LoginActivity.this, ShopListActivity.class);
                             productScreen.putExtra("username", etUsername.getText().toString());
                             startActivity(productScreen);
+                            createDatabase();
                             //finish();
                         } else {
                             Toast.makeText(LoginActivity.this, "login failed", Toast.LENGTH_LONG).show();
@@ -104,4 +105,5 @@ public class LoginActivity extends AppCompatActivity {
         etUsername.setText("");
         etPassword.setText("");
     }
+
 }
