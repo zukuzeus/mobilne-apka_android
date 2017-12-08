@@ -91,8 +91,11 @@ public class ShopListActivity extends ActivityWithDatabase {
             askServerForID();
             if (DATABASE.getID() != -1) {
                 // askServerDatabaseForProductsAndSaveItLocally();
-                sendServerStateOfDatabase();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    sendServerStateOfDatabase();
+                }
             }
+            recreate();
         });
 
         final TextWatcher buttonEnabledWatcher = new TextWatcher() {
@@ -199,7 +202,6 @@ public class ShopListActivity extends ActivityWithDatabase {
 
     @android.support.annotation.RequiresApi(api = Build.VERSION_CODES.N)
     private void sendServerStateOfDatabase() {
-        String mUrl;  //initialized somewhere else
         //ArrayList<Product> mojeProdukty;  //initialized somewhere else
 
         //Map<String, Object> jsonParams = new HashMap<>();
@@ -219,9 +221,25 @@ public class ShopListActivity extends ActivityWithDatabase {
 
         StringRequest srequest = new StringRequest(Request.Method.POST, InterActivityVariablesSingleton.getInstance().getSYNCHRONIZEURL(), s -> {
             Log.d("odp z serwera: ", s.toString());
-            if (s.toString().equals(true)) {
-                Toast.makeText(ShopListActivity.this, "spoko loko -> " + s, Toast.LENGTH_LONG).show();
+            List<Product> productList = new ArrayList<>();
+            Toast.makeText(ShopListActivity.this, "spoko loko -> " + s, Toast.LENGTH_LONG).show();
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+                JSONArray jsonArray = jsonObject.getJSONArray("stanBazyServer");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject productJson = jsonArray.getJSONObject(i);
+                    Product product = new Product();
+                    product.setProductName(productJson.getString("productName"));
+                    product.setStore(productJson.getString("store"));
+                    product.setPrice(productJson.getDouble("price"));
+                    product.setQuantityRemote(productJson.getInt("quantity"));
+                    productList.add(product);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+            DATABASE.insertOrUpdateProducts(productList);
+
         }, error -> Toast.makeText(ShopListActivity.this, "Some error during ID asking serwer -> " + error, Toast.LENGTH_LONG).show()) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {

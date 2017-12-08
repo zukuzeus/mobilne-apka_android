@@ -3,8 +3,10 @@ package com.example.danie.mobilne.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 import android.util.Log;
 
 import com.example.danie.mobilne.ShopList.Product;
@@ -34,6 +36,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TASK_CREATE_DEVICE_TABLE_ID = "create table " + TABLE_NAME_ID + " "
             + "( " + COL_1_ID + " INT PRIMARY KEY )";
     private static final String DEBUG_TAG = "SqLiteTodoManager";
+    private static final String COMMA = ",";
+    private static final String EAR = "'";
 
     private static final int DB_VERSION = 2;
 
@@ -127,6 +131,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
     }
 
+    public boolean insertDataSynchronize(final Product product) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_1_PRODUCTS, product.getProductName());
+        contentValues.put(COL_2_PRODUCTS, product.getStore());
+        contentValues.put(COL_3_PRODUCTS, product.getPrice());
+        contentValues.put(COL_4_PRODUCTS, 0);
+        contentValues.put(COL_5_PRODUCTS, product.getQuantityRemote());
+        long result = db.insert(TABLE_NAME_PRODUCTS, null, contentValues);
+        if (result == -1)
+            return false;
+        else
+            return true;
+    }
+
     public boolean insertDataToDBFromList(final List<Product> productList) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -200,6 +219,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
     }
 
+    public boolean updateDataSynchronize(final Product product) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_5_PRODUCTS, product.getQuantityRemote());
+        long result = db.update(TABLE_NAME_PRODUCTS, contentValues, COL_1_PRODUCTS + " = ?", new String[]{product.getProductName()});
+        if (result == -1)
+            return false;
+        else
+            return true;
+    }
+
     public Integer deleteData(final String productName) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_NAME_PRODUCTS, COL_1_PRODUCTS + " = ?", new String[]{productName});
@@ -210,4 +240,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.delete(TABLE_NAME_PRODUCTS, COL_1_PRODUCTS + " = ?", new String[]{product.getProductName()});
     }
 
+    public void insertOrUpdateProducts(List<Product> productList) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            productList.forEach(this::insertOrUpdateProduct);
+        }
+    }
+
+    public void insertOrUpdateProduct(Product product) {
+        if (isProductExist(product.getProductName())) {
+            updateDataSynchronize(product);
+        } else {
+            insertDataSynchronize(product);
+        }
+    }
+
+    private boolean isProductExist(String productName) {
+        long line = DatabaseUtils.longForQuery(this.getReadableDatabase(), "SELECT COUNT(*) FROM " + TABLE_NAME_PRODUCTS + " WHERE " + COL_1_PRODUCTS + "=?",
+                new String[]{productName});
+        return line > 0;
+    }
 }

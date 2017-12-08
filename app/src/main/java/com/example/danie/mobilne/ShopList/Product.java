@@ -16,8 +16,7 @@ public class Product implements Serializable {
     private double price;
     private int quantity;
     private int quantityRemote;
-    private int quantityLocal;
-    //private ProductGlobalState subStatesOfProduct;
+
 
     public Product() {
     }
@@ -104,9 +103,12 @@ public class Product implements Serializable {
         this.quantity = quantity;
     }
 
+    public int getQuantityRemote() {
+        return quantityRemote;
+    }
+
     public void setQuantityRemote(int quantity) {
 //        this.subStatesOfProduct.setDeviceQuantityFromRemote(quantity);
         this.quantityRemote = quantity;
     }
-
 }
