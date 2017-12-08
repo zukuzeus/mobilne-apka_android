@@ -1,5 +1,8 @@
 package com.example.danie.mobilne.ShopList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 
 /**
@@ -12,7 +15,9 @@ public class Product implements Serializable {
     private String store;
     private double price;
     private int quantity;
-    private ProductGlobalState subStatesOfProduct;
+    private int quantityRemote;
+    private int quantityLocal;
+    //private ProductGlobalState subStatesOfProduct;
 
     public Product() {
     }
@@ -22,7 +27,17 @@ public class Product implements Serializable {
         this.store = store;
         this.price = price;
         this.quantity = quantity;
-        this.subStatesOfProduct = new ProductGlobalState(quantity, 0);
+        this.quantityRemote = 0;
+        //this.subStatesOfProduct = new ProductGlobalState(quantity, 0);
+    }
+
+    public Product(String productName, String store, double price, int quantity, int quantityRemote) {
+        this.productName = productName;
+        this.store = store;
+        this.price = price;
+        this.quantity = quantity;
+        this.quantityRemote = quantityRemote;
+        //this.subStatesOfProduct = new ProductGlobalState(quantity, 0);
     }
 
     @Override
@@ -32,9 +47,29 @@ public class Product implements Serializable {
                 ", store='" + store + '\'' +
                 ", price=" + price +
                 ", quantity=" + quantity +
-                ", subStatesOfProduct=" + subStatesOfProduct.toString() +
+                ", quantityRemote=" + this.quantityRemote +
                 '}';
     }
+
+    public JSONObject toJsonObject() {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("productName", this.productName);
+            jsonObject.put("store", this.store);
+            jsonObject.put("price", this.price);
+            jsonObject.put("quantity", this.quantity);
+            //jsonObject.put("quantityRemote", this.quantityRemote);
+//            jsonObject.put("quantityRemote", this.quantityRemote)
+
+//            jsonObject.put("subStatesOfProduct", this.subStatesOfProduct.toJSONObject());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+
 
     public String getProductName() {
         return productName;
@@ -65,12 +100,13 @@ public class Product implements Serializable {
     }
 
     public void setQuantity(int quantity) {
-        this.subStatesOfProduct.setQuantityLocaly(quantity);
+        //this.subStatesOfProduct.setQuantityLocaly(quantity);
         this.quantity = quantity;
     }
 
     public void setQuantityRemote(int quantity) {
-        this.subStatesOfProduct.setDeviceQuantityFromRemote(quantity);
+//        this.subStatesOfProduct.setDeviceQuantityFromRemote(quantity);
+        this.quantityRemote = quantity;
     }
 
 }

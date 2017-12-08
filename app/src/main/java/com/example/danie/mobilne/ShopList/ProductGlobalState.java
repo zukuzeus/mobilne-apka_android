@@ -1,5 +1,8 @@
 package com.example.danie.mobilne.ShopList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 
 /**
@@ -43,5 +46,16 @@ public class ProductGlobalState implements Serializable {
                 "quantityLocaly=" + quantityLocaly +
                 ", secondDeviceQuantity=" + secondDeviceQuantity +
                 '}';
+    }
+
+    public JSONObject toJSONObject() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("quantityLocaly", this.quantityLocaly);
+            jsonObject.put("secondDeviceQuantity", this.secondDeviceQuantity);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
     }
 }

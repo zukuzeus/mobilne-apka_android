@@ -19,6 +19,8 @@ public class InterActivityVariablesSingleton {
     private final String DELETE_PRODUCT = "/delete";
     private final String UPDATE_PRODUCT = "/update";
     private final String ADD_PRODUCT = "/add";
+    private final String GETID = "/getId";
+    private final String SYNCHRONIZE = "/synchronize";
     private String Ip;
     private String SERVER_ADRESS;
     private String USER;
@@ -108,6 +110,14 @@ public class InterActivityVariablesSingleton {
 
     public synchronized String getAddURL() {
         return INSTANCE.SERVER_ADRESS + ADD_PRODUCT;
+    }
+
+    public synchronized String getIdURL() {
+        return INSTANCE.SERVER_ADRESS + GETID;
+    }
+
+    public synchronized String getSYNCHRONIZEURL() {
+        return INSTANCE.SERVER_ADRESS + SYNCHRONIZE;
     }
 
     public synchronized void setServerIp(String ip) {

@@ -18,6 +18,9 @@ public class DatabaseContext extends ContextWrapper {
     String path = Environment.getExternalStorageDirectory().getAbsolutePath()
             + File.separator + "databases"
             + File.separator;
+    //String dbfile12 = "/mnt" + "/sdcard" + File.separator + "databases" + File.separator;
+    File sdcard = Environment.getExternalStorageDirectory();
+    String dbfile2 = sdcard.getPath() + File.separator + "databases" + File.separator;
 
     public DatabaseContext(Context base) {
         super(base);
@@ -26,8 +29,13 @@ public class DatabaseContext extends ContextWrapper {
     @Override
     public File getDatabasePath(String name) {
         File sdcard = Environment.getExternalStorageDirectory();
-        String dbfile = sdcard.getAbsolutePath() + File.separator + "databases" + File.separator + name;
-        //Log.d(DEBUG_CONTEXT,dbfile);
+        String dbfile = sdcard.getPath() + File.separator + "databases" + File.separator + name;
+        //String dbfile = "/mnt" + "/sdcard" + File.separator + "databases" + File.separator + name;
+//        String url = Environment.getExternalStorageDirectory().toString();
+//        if(android.os.Build.DEVICE.contains("Samsung") || android.os.Build.MANUFACTURER.contains("Samsung")){
+//            url = url + "/external_sd/";
+//        }
+        Log.d(DEBUG_CONTEXT, dbfile);
         if (!dbfile.endsWith(".db")) {
             dbfile += ".db";
         }

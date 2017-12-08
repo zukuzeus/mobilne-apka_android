@@ -1,9 +1,11 @@
 package com.example.danie.mobilne.ShopList;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.danie.mobilne.CustomActivities.ActivityWithDatabase;
@@ -24,6 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -83,7 +87,12 @@ public class ShopListActivity extends ActivityWithDatabase {
             recreate();
         });
         synchronise.setOnClickListener(v -> {
-            askServerDatabaseForProductsAndSaveItLocally();
+            //askServerDatabaseForProductsAndSaveItLocally();
+            askServerForID();
+            if (DATABASE.getID() != -1) {
+                // askServerDatabaseForProductsAndSaveItLocally();
+                sendServerStateOfDatabase();
+            }
         });
 
         final TextWatcher buttonEnabledWatcher = new TextWatcher() {
@@ -162,6 +171,96 @@ public class ShopListActivity extends ActivityWithDatabase {
         rQueuee.add(request);
     }
 
+    private void askServerForID() {
+        StringRequest request = new StringRequest(Request.Method.POST, InterActivityVariablesSingleton.getInstance().getIdURL(), s -> {
+
+            if (s.equals(Integer.toString(-1))) {
+                //dupne id
+                Toast.makeText(ShopListActivity.this, "jakis bląd serwera zle id zwraca", Toast.LENGTH_LONG).show();
+            } else if (Integer.parseInt(s) >= 1 && DATABASE.getID() == -1) {
+                if (DATABASE.insertID(Integer.parseInt(s)))
+                    Toast.makeText(ShopListActivity.this, "ID w naszej bazie zostalo wpisane i jest równe =  " + DATABASE.getID(), Toast.LENGTH_LONG).show();
+            } else
+                Toast.makeText(ShopListActivity.this, "ID istnieje juz w bazie i wynosi =  " + DATABASE.getID(), Toast.LENGTH_LONG).show();
+        }, error -> Toast.makeText(ShopListActivity.this, "Some error during ID asking serwer -> " + error, Toast.LENGTH_LONG).show()) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parameters = new HashMap<String, String>();
+                parameters.put("username", InterActivityVariablesSingleton.getInstance().getUSER());
+                parameters.put("password", InterActivityVariablesSingleton.getInstance().getPASSWORD());
+                parameters.put("id", String.valueOf(DATABASE.getID()));
+                return parameters;
+            }
+
+        };
+        RequestQueue rQueuee = Volley.newRequestQueue(ShopListActivity.this);
+        rQueuee.add(request);
+    }
+
+    @android.support.annotation.RequiresApi(api = Build.VERSION_CODES.N)
+    private void sendServerStateOfDatabase() {
+        String mUrl;  //initialized somewhere else
+        //ArrayList<Product> mojeProdukty;  //initialized somewhere else
+
+        //Map<String, Object> jsonParams = new HashMap<>();
+        JSONArray a = new JSONArray();
+        DATABASE.getAllMyProductsAsList().stream().map(Product::toJsonObject).forEach(a::put);
+        JSONObject objTransport = new JSONObject();
+
+        try {
+            objTransport.put("username", InterActivityVariablesSingleton.getInstance().getUSER());
+            //objTransport.put("password", InterActivityVariablesSingleton.getInstance().getPASSWORD());
+            objTransport.put("id", String.valueOf(DATABASE.getID()));
+            objTransport.put("stanBazy", a);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        final String requestBody = objTransport.toString();
+
+        StringRequest srequest = new StringRequest(Request.Method.POST, InterActivityVariablesSingleton.getInstance().getSYNCHRONIZEURL(), s -> {
+            Log.d("odp z serwera: ", s.toString());
+            if (s.toString().equals(true)) {
+                Toast.makeText(ShopListActivity.this, "spoko loko -> " + s, Toast.LENGTH_LONG).show();
+            }
+        }, error -> Toast.makeText(ShopListActivity.this, "Some error during ID asking serwer -> " + error, Toast.LENGTH_LONG).show()) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> params = new HashMap<String, String>();
+                String creds = String.format("%s:%s", InterActivityVariablesSingleton.getInstance().getUSER(), InterActivityVariablesSingleton.getInstance().getPASSWORD());
+                String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.NO_WRAP);//or Base64.NO_WRAP // Base64.DEFAULT
+                params.put("Authorization", auth);
+                return params;
+            }
+
+//            @Override
+//            public String getBodyContentType() {
+//                return "application/json; charset=utf-8";
+//            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                try {
+                    return requestBody == null ? null : requestBody.getBytes("utf-8");
+                } catch (UnsupportedEncodingException uee) {
+                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                    return null;
+                }
+            }
+
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                Map<String, String> parameters = new HashMap<String, String>();
+//                parameters.put("username", InterActivityVariablesSingleton.getInstance().getUSER());
+//                parameters.put("password", InterActivityVariablesSingleton.getInstance().getPASSWORD());
+//                parameters.put("id", String.valueOf(DATABASE.getID()));
+//
+//                return parameters;
+//            }
+        };
+        RequestQueue rQueuee = Volley.newRequestQueue(ShopListActivity.this);
+        rQueuee.add(srequest);
+    }
+
     private void addProductToServerDatabase() {
         //TODO zrobić porzadek z tym czyms
         StringRequest request = new StringRequest(Request.Method.POST, InterActivityVariablesSingleton.getInstance().getAddURL(), (String s) -> {
@@ -188,7 +287,7 @@ public class ShopListActivity extends ActivityWithDatabase {
     }
 
     private void askLocalDatabaseForProducts() {
-        productList = DATABASE.getAllProductsAsList();
+        productList = DATABASE.getAllMyProductsAsList();
         ProductAdapter adapter = new ProductAdapter(ShopListActivity.this, productList);
         listView.setAdapter(adapter);
     }
