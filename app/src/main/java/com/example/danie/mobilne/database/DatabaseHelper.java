@@ -147,22 +147,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
     }
 
-    public boolean insertDataToDBFromList(final List<Product> productList) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        long result = 1;
-        for (int i = 0; i < productList.size(); i++) {
-            contentValues.put(COL_1_PRODUCTS, productList.get(i).getProductName());
-            contentValues.put(COL_2_PRODUCTS, productList.get(i).getStore());
-            contentValues.put(COL_3_PRODUCTS, productList.get(i).getPrice());
-            contentValues.put(COL_4_PRODUCTS, productList.get(i).getQuantity());
-            result = db.insert(TABLE_NAME_PRODUCTS, null, contentValues);
-//            if (result == -1) return false;
-        }
-        if (result == -1) return false;
-        return true;
-    }
-
     public Cursor getAllData() {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery("select * from " + TABLE_NAME_PRODUCTS, null);
@@ -186,7 +170,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         cursor.getString(0),
                         cursor.getString(1),
                         Double.parseDouble(cursor.getString(2)),
-                        Integer.parseInt(cursor.getString(3)));
+                        Integer.parseInt(cursor.getString(3)),
+                        Integer.parseInt(cursor.getString(4)));
                 // product.setQuantityRemote(Integer.parseInt(cursor.getString(4)));
                 ProductList.add(product);
             } while (cursor.moveToNext());
@@ -203,6 +188,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_3_PRODUCTS, price);
         contentValues.put(COL_4_PRODUCTS, quantity);
         db.update(TABLE_NAME_PRODUCTS, contentValues, COL_1_PRODUCTS + " = ?", new String[]{productName});
+        return true;
+    }
+
+    public boolean insertDataToDBFromList(final List<Product> productList) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        long result = 1;
+        for (int i = 0; i < productList.size(); i++) {
+            contentValues.put(COL_1_PRODUCTS, productList.get(i).getProductName());
+            contentValues.put(COL_2_PRODUCTS, productList.get(i).getStore());
+            contentValues.put(COL_3_PRODUCTS, productList.get(i).getPrice());
+            contentValues.put(COL_4_PRODUCTS, productList.get(i).getQuantity());
+            result = db.insert(TABLE_NAME_PRODUCTS, null, contentValues);
+//            if (result == -1) return false;
+        }
+        if (result == -1) return false;
         return true;
     }
 
