@@ -111,4 +111,8 @@ public class Product implements Serializable {
 //        this.subStatesOfProduct.setDeviceQuantityFromRemote(quantity);
         this.quantityRemote = quantity;
     }
+
+    public int getProductSum() {
+        return this.quantity + this.quantityRemote;
+    }
 }

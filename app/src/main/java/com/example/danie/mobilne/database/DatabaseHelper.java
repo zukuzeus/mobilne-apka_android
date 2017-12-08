@@ -7,6 +7,7 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.example.danie.mobilne.ShopList.Product;
@@ -240,10 +241,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.delete(TABLE_NAME_PRODUCTS, COL_1_PRODUCTS + " = ?", new String[]{product.getProductName()});
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void insertOrUpdateProducts(List<Product> productList) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            productList.forEach(this::insertOrUpdateProduct);
-        }
+        productList.forEach(this::insertOrUpdateProduct);
     }
 
     public void insertOrUpdateProduct(Product product) {

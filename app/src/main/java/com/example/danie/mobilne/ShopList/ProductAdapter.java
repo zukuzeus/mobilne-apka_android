@@ -59,7 +59,7 @@ public class ProductAdapter extends BaseAdapter {
         productname.setText(product.getProductName());
         productshop.setText(product.getStore());
         productprice.setText(Double.toString(product.getPrice()));
-        productquantity.setText(Integer.toString(product.getQuantity()));
+        productquantity.setText(Integer.toString(product.getProductSum()));
 
         return view;
     }
